@@ -101,6 +101,29 @@ app.put('/api/matches/:id/result', async (req, res) => {
     res.json({ message: "Resultado actualizado y puntos calculados" });
 });
 
+// Cargar participantes y predicciones masivamente desde Postman
+app.post('/api/participants/batch', async (req, res) => {
+    try {
+        const participantes = req.body; // Esperamos un array de participantes
+        
+        for (const p of participantes) {
+            await prisma.participant.create({
+                data: {
+                    name: p.name,
+                    predictions: {
+                        // Prisma creará las predicciones y las enlazará automáticamente al participante
+                        create: p.predictions 
+                    }
+                }
+            });
+        }
+        res.json({ message: "Participantes y predicciones cargados con éxito" });
+    } catch (error) {
+        console.error("Error en la carga masiva:", error);
+        res.status(500).json({ error: "Hubo un error al cargar los datos" });
+    }
+});
+
 // Arrancar servidor
 const PORT = process.env.PORT || 8080;
 app.listen(PORT, () => console.log(`Backend corriendo en puerto ${PORT}`));
