@@ -44,7 +44,11 @@ app.post('/api/participants', async (req, res) => {
 
 // Obtener partidos
 app.get('/api/matches', async (req, res) => {
-    const matches = await prisma.match.findMany();
+    const matches = await prisma.match.findMany({
+        orderBy: {
+            id: 'asc' // <--- ESTA ES LA MAGIA: Siempre ordenados por ID de menor a mayor
+        }
+    });
     res.json(matches);
 });
 
