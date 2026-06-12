@@ -97,35 +97,68 @@ app.post('/api/predictions/:participantId/:matchId', async (req, res) => {
     }
 });
 
-// Actualizar resultado y calcular puntos
 app.put('/api/matches/:id/result', async (req, res) => {
     const matchId = parseInt(req.params.id);
-    const { goalsA, goalsB } = req.body; // En Express es mejor mandarlo en el body que como RequestParam
+    const { goalsA, goalsB } = req.body;
 
-    // 1. Guardar resultado real
-    await prisma.match.update({
-        where: { id: matchId },
-        data: { realGoalsA: goalsA, realGoalsB: goalsB }
-    });
+    try {
 
-    // 2. Buscar predicciones de este partido
-    const predictions = await prisma.prediction.findMany({
-        where: { matchId: matchId },
-        include: { participant: true }
-    });
+        // Guardar resultado real
+        await prisma.match.update({
+            where: { id: matchId },
+            data: {
+                realGoalsA: goalsA,
+                realGoalsB: goalsB
+            }
+        });
 
-    // 3. Calcular puntos y actualizar participantes
-    for (const pred of predictions) {
-        const puntosGanados = calcularPuntos(pred.goalsA, pred.goalsB, goalsA, goalsB);
-        if (puntosGanados > 0) {
+        // Obtener todos los participantes
+        const participants = await prisma.participant.findMany({
+            include: {
+                predictions: {
+                    include: {
+                        match: true
+                    }
+                }
+            }
+        });
+
+        // Recalcular desde cero
+        for (const participant of participants) {
+
+            let totalPoints = 0;
+
+            for (const pred of participant.predictions) {
+
+                if (
+                    pred.match.realGoalsA !== null &&
+                    pred.match.realGoalsB !== null
+                ) {
+                    totalPoints += calcularPuntos(
+                        pred.goalsA,
+                        pred.goalsB,
+                        pred.match.realGoalsA,
+                        pred.match.realGoalsB
+                    );
+                }
+            }
+
             await prisma.participant.update({
-                where: { id: pred.participantId },
-                data: { totalPoints: pred.participant.totalPoints + puntosGanados }
+                where: { id: participant.id },
+                data: { totalPoints }
             });
         }
-    }
 
-    res.json({ message: "Resultado actualizado y puntos calculados" });
+        res.json({
+            message: "Resultado actualizado y puntajes recalculados"
+        });
+
+    } catch (error) {
+        console.error(error);
+        res.status(500).json({
+            error: "Error recalculando puntajes"
+        });
+    }
 });
 
 // Cargar participantes y predicciones masivamente desde Postman
