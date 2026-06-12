@@ -58,20 +58,43 @@ app.post('/api/matches/batch', async (req, res) => {
     res.json(matches);
 });
 
-// Crear predicción
+// Crear o actualizar predicción
 app.post('/api/predictions/:participantId/:matchId', async (req, res) => {
     const { participantId, matchId } = req.params;
     const { goalsA, goalsB } = req.body;
     
-    const prediction = await prisma.prediction.create({
-        data: {
-            goalsA,
-            goalsB,
-            matchId: parseInt(matchId),
-            participantId: parseInt(participantId)
+    try {
+        // 1. Buscamos si este participante ya tiene una predicción para este partido
+        const existente = await prisma.prediction.findFirst({
+            where: { 
+                participantId: parseInt(participantId), 
+                matchId: parseInt(matchId) 
+            }
+        });
+
+        if (existente) {
+            // 2. Si ya existía, la actualizamos
+            const actualizada = await prisma.prediction.update({
+                where: { id: existente.id },
+                data: { goalsA, goalsB }
+            });
+            return res.json(actualizada);
+        } else {
+            // 3. Si estaba en blanco, creamos una nueva
+            const nueva = await prisma.prediction.create({
+                data: {
+                    goalsA,
+                    goalsB,
+                    matchId: parseInt(matchId),
+                    participantId: parseInt(participantId)
+                }
+            });
+            return res.json(nueva);
         }
-    });
-    res.json(prediction);
+    } catch (error) {
+        console.error("Error al guardar predicción:", error);
+        res.status(500).json({ error: "Hubo un error al guardar" });
+    }
 });
 
 // Actualizar resultado y calcular puntos
