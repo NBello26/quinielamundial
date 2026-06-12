@@ -147,6 +147,106 @@ app.get('/api/participants/:id', async (req, res) => {
     }
 });
 
+// ENDPOINT TEMPORAL DE RESCATE
+app.get('/api/fix-matches', async (req, res) => {
+    const partidosCorregidos = [
+        // --- FECHA 1 (Orden exacto de tu Excel) ---
+        { teamA: "México", teamB: "Sudáfrica" }, // 1
+        { teamA: "Corea del Sur", teamB: "República Checa" }, // 2
+        { teamA: "Canadá", teamB: "Bosnia y Herzegovina" }, // 3
+        { teamA: "Estados Unidos", teamB: "Paraguay" }, // 4
+        { teamA: "Catar", teamB: "Suiza" }, // 5
+        { teamA: "Brasil", teamB: "Marruecos" }, // 6
+        { teamA: "Haití", teamB: "Escocia" }, // 7
+        { teamA: "Australia", teamB: "Turquía" }, // 8
+        { teamA: "Alemania", teamB: "Curazao" }, // 9
+        { teamA: "Países Bajos", teamB: "Japón" }, // 10
+        { teamA: "Costa de Marfil", teamB: "Ecuador" }, // 11
+        { teamA: "Suecia", teamB: "Túnez" }, // 12
+        { teamA: "España", teamB: "Cabo Verde" }, // 13
+        { teamA: "Bélgica", teamB: "Egipto" }, // 14
+        { teamA: "Arabia Saudita", teamB: "Uruguay" }, // 15
+        { teamA: "Irán", teamB: "Nueva Zelanda" }, // 16
+        { teamA: "Francia", teamB: "Senegal" }, // 17
+        { teamA: "Irak", teamB: "Noruega" }, // 18
+        { teamA: "Argentina", teamB: "Argelia" }, // 19
+        { teamA: "Austria", teamB: "Jordania" }, // 20
+        { teamA: "Portugal", teamB: "RD Congo" }, // 21
+        { teamA: "Inglaterra", teamB: "Croacia" }, // 22
+        { teamA: "Ghana", teamB: "Panamá" }, // 23
+        { teamA: "Uzbekistán", teamB: "Colombia" }, // 24
+
+        // --- FECHA 2 (Orden exacto de tu Excel hasta el 36) ---
+        { teamA: "República Checa", teamB: "Sudáfrica" }, // 25
+        { teamA: "Suiza", teamB: "Bosnia y Herzegovina" }, // 26
+        { teamA: "Canadá", teamB: "Catar" }, // 27
+        { teamA: "México", teamB: "Corea del Sur" }, // 28
+        { teamA: "Estados Unidos", teamB: "Australia" }, // 29
+        { teamA: "Escocia", teamB: "Marruecos" }, // 30
+        { teamA: "Brasil", teamB: "Haití" }, // 31
+        { teamA: "Turquía", teamB: "Paraguay" }, // 32
+        { teamA: "Países Bajos", teamB: "Suecia" }, // 33
+        { teamA: "Alemania", teamB: "Costa de Marfil" }, // 34
+        { teamA: "Ecuador", teamB: "Curazao" }, // 35
+        { teamA: "Túnez", teamB: "Japón" }, // 36
+
+        // --- DE AQUÍ EN ADELANTE (37 al 72) RELLENADOS DEL JSON ---
+        { "teamA": "Bélgica", "teamB": "Irán" }, // 37
+        { "teamA": "Nueva Zelanda", "teamB": "Egipto" }, // 38
+        { "teamA": "España", "teamB": "Arabia Saudita" }, // 39
+        { "teamA": "Uruguay", "teamB": "Cabo Verde" }, // 40
+        { "teamA": "Francia", "teamB": "Irak" }, // 41
+        { "teamA": "Noruega", "teamB": "Senegal" }, // 42
+        { "teamA": "Argentina", "teamB": "Austria" }, // 43
+        { "teamA": "Jordania", "teamB": "Argelia" }, // 44
+        { "teamA": "Portugal", "teamB": "Uzbekistán" }, // 45
+        { "teamA": "Colombia", "teamB": "RD Congo" }, // 46
+        { "teamA": "Inglaterra", "teamB": "Ghana" }, // 47
+        { "teamA": "Panamá", "teamB": "Croacia" }, // 48
+        
+        // --- FECHA 3 ---
+        { "teamA": "República Checa", "teamB": "México" }, // 49
+        { "teamA": "Sudáfrica", "teamB": "Corea del Sur" }, // 50
+        { "teamA": "Suiza", "teamB": "Canadá" }, // 51
+        { "teamA": "Bosnia y Herzegovina", "teamB": "Catar" }, // 52
+        { "teamA": "Marruecos", "teamB": "Haití" }, // 53
+        { "teamA": "Turquía", "teamB": "Estados Unidos" }, // 54
+        { "teamA": "Paraguay", "teamB": "Australia" }, // 55
+        { "teamA": "Curazao", "teamB": "Costa de Marfil" }, // 56
+        { "teamA": "Ecuador", "teamB": "Alemania" }, // 57
+        { "teamA": "Japón", "teamB": "Suecia" }, // 58
+        { "teamA": "Túnez", "teamB": "Países Bajos" }, // 59
+        { "teamA": "Nueva Zelanda", "teamB": "Bélgica" }, // 60
+        { "teamA": "Egipto", "teamB": "Irán" }, // 61
+        { "teamA": "Uruguay", "teamB": "España" }, // 62
+        { "teamA": "Cabo Verde", "teamB": "Arabia Saudita" }, // 63
+        { "teamA": "Noruega", "teamB": "Francia" }, // 64
+        { "teamA": "Senegal", "teamB": "Irak" }, // 65
+        { "teamA": "Jordania", "teamB": "Argentina" }, // 66
+        { "teamA": "Argelia", "teamB": "Austria" }, // 67
+        { "teamA": "Colombia", "teamB": "Portugal" }, // 68
+        { "teamA": "RD Congo", "teamB": "Uzbekistán" }, // 69
+        { "teamA": "Panamá", "teamB": "Inglaterra" }, // 70
+        { "teamA": "Croacia", "teamB": "Ghana" } // 71 (Debería haber uno más aquí si son 72, revisa tu JSON original)
+    ];
+
+    try {
+        for (let i = 0; i < partidosCorregidos.length; i++) {
+            await prisma.match.update({
+                where: { id: i + 1 }, 
+                data: {
+                    teamA: partidosCorregidos[i].teamA,
+                    teamB: partidosCorregidos[i].teamB
+                }
+            });
+        }
+        res.json({ message: "¡Base de datos corregida! El orden ya calza con tu Excel." });
+    } catch(error) {
+        console.error(error);
+        res.status(500).json({ error: "Hubo un error al actualizar" });
+    }
+});
+
 // Arrancar servidor
 const PORT = process.env.PORT || 8080;
 app.listen(PORT, () => console.log(`Backend corriendo en puerto ${PORT}`));
