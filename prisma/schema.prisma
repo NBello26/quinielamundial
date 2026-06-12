@@ -14,6 +14,7 @@ model Match {
   realGoalsA Int?
   realGoalsB Int?
   predictions Prediction[]
+  group        String?
 }
 
 model Participant {
