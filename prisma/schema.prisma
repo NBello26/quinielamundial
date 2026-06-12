@@ -8,13 +8,13 @@ datasource db {
 }
 
 model Match {
-  id         Int          @id @default(autoincrement())
-  teamA      String
-  teamB      String
-  realGoalsA Int?
-  realGoalsB Int?
+  id          Int          @id @default(autoincrement())
+  teamA       String
+  teamB       String
+  realGoalsA  Int?
+  realGoalsB  Int?
+  group       String?
   predictions Prediction[]
-  group        String?
 }
 
 model Participant {

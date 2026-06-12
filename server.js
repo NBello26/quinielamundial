@@ -270,6 +270,16 @@ app.get('/api/fix-matches', async (req, res) => {
         res.status(500).json({ error: "Hubo un error al actualizar los partidos." });
     }
 });
+
+app.get('/api/debug-matches', async (req, res) => {
+  const matches = await prisma.match.findMany({
+    orderBy: {
+      id: 'asc'
+    }
+  });
+
+  res.json(matches);
+});
 // Arrancar servidor
 const PORT = process.env.PORT || 8080;
 app.listen(PORT, () => console.log(`Backend corriendo en puerto ${PORT}`));
