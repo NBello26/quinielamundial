@@ -280,6 +280,23 @@ app.get('/api/debug-matches', async (req, res) => {
 
   res.json(matches);
 });
+
+app.get('/api/create-match-72', async (req, res) => {
+    try {
+        const match = await prisma.match.create({
+            data: {
+                teamA: "Croacia",
+                teamB: "Ghana",
+                group: "L"
+            }
+        });
+
+        res.json(match);
+    } catch (error) {
+        console.error(error);
+        res.status(500).json(error);
+    }
+});
 // Arrancar servidor
 const PORT = process.env.PORT || 8080;
 app.listen(PORT, () => console.log(`Backend corriendo en puerto ${PORT}`));
