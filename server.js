@@ -330,6 +330,40 @@ app.get('/api/create-match-72', async (req, res) => {
         res.status(500).json(error);
     }
 });
+
+// Obtener un partido específico con las predicciones de todos los participantes
+app.get('/api/matches/:id/predictions', async (req, res) => {
+    try {
+        const matchId = parseInt(req.params.id);
+        
+        // 1. Buscamos el partido para tener el contexto (equipos, resultado real)
+        const match = await prisma.match.findUnique({
+            where: { id: matchId }
+        });
+
+        if (!match) {
+            return res.status(404).json({ error: "Partido no encontrado" });
+        }
+
+        // 2. Buscamos las predicciones asociadas a este partido, 
+        // incluyendo la información del participante.
+        const predictions = await prisma.prediction.findMany({
+            where: { matchId: matchId },
+            include: { 
+                participant: true // Incluimos al participante para tener su nombre
+            },
+            orderBy: {
+                participant: { totalPoints: 'desc' } // Los ordenamos por el que va ganando en la general
+            }
+        });
+
+        // Devolvemos tanto los datos del partido como el arreglo de predicciones
+        res.json({ match, predictions });
+    } catch (error) {
+        console.error("Error al buscar predicciones del partido:", error);
+        res.status(500).json({ error: "Error al cargar los datos del partido" });
+    }
+});
 // Arrancar servidor
 const PORT = process.env.PORT || 8080;
 app.listen(PORT, () => console.log(`Backend corriendo en puerto ${PORT}`));
