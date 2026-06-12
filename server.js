@@ -128,6 +128,25 @@ app.post('/api/participants/batch', async (req, res) => {
     }
 });
 
+// Obtener un participante específico con todas sus predicciones y los datos de los partidos
+app.get('/api/participants/:id', async (req, res) => {
+    try {
+        const participant = await prisma.participant.findUnique({
+            where: { id: parseInt(req.params.id) },
+            include: {
+                predictions: {
+                    include: { match: true }, // Trae los datos del partido (nombres de equipos y resultado real)
+                    orderBy: { matchId: 'asc' } // Los ordena cronológicamente (Fecha 1, 2, 3)
+                }
+            }
+        });
+        res.json(participant);
+    } catch (error) {
+        console.error("Error al buscar predicciones:", error);
+        res.status(500).json({ error: "Error al cargar los datos" });
+    }
+});
+
 // Arrancar servidor
 const PORT = process.env.PORT || 8080;
 app.listen(PORT, () => console.log(`Backend corriendo en puerto ${PORT}`));
