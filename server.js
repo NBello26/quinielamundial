@@ -206,44 +206,44 @@ app.get('/api/participants/:id', async (req, res) => {
 // ENDPOINT TEMPORAL DE RESCATE
 app.get('/api/fix-matches', async (req, res) => {
     const partidosCorregidos = [
-        // ================= FECHA 1 =================
+        // ================= FECHA 1 (Orden 100% Excel) =================
         { id: 1, teamA: "México", teamB: "Sudáfrica", group: "A" },
         { id: 2, teamA: "Corea del Sur", teamB: "República Checa", group: "A" },
         { id: 3, teamA: "Canadá", teamB: "Bosnia y Herzegovina", group: "B" },
-        { id: 4, teamA: "Catar", teamB: "Suiza", group: "B" },
-        { id: 5, teamA: "Estados Unidos", teamB: "Paraguay", group: "C" },
-        { id: 6, teamA: "Australia", teamB: "Turquía", group: "C" },
-        { id: 7, teamA: "Brasil", teamB: "Marruecos", group: "D" },
-        { id: 8, teamA: "Haití", teamB: "Escocia", group: "D" },
+        { id: 4, teamA: "Estados Unidos", teamB: "Paraguay", group: "C" },
+        { id: 5, teamA: "Catar", teamB: "Suiza", group: "B" },
+        { id: 6, teamA: "Brasil", teamB: "Marruecos", group: "D" },
+        { id: 7, teamA: "Haití", teamB: "Escocia", group: "D" },
+        { id: 8, teamA: "Australia", teamB: "Turquía", group: "C" },
         { id: 9, teamA: "Alemania", teamB: "Curazao", group: "E" },
-        { id: 10, teamA: "Costa de Marfil", teamB: "Ecuador", group: "E" },
-        { id: 11, teamA: "Países Bajos", teamB: "Japón", group: "F" },
+        { id: 10, teamA: "Países Bajos", teamB: "Japón", group: "F" },
+        { id: 11, teamA: "Costa de Marfil", teamB: "Ecuador", group: "E" },
         { id: 12, teamA: "Suecia", teamB: "Túnez", group: "F" },
         { id: 13, teamA: "España", teamB: "Cabo Verde", group: "G" },
-        { id: 14, teamA: "Arabia Saudita", teamB: "Uruguay", group: "G" },
-        { id: 15, teamA: "Bélgica", teamB: "Egipto", group: "H" },
+        { id: 14, teamA: "Bélgica", teamB: "Egipto", group: "H" },
+        { id: 15, teamA: "Arabia Saudita", teamB: "Uruguay", group: "G" },
         { id: 16, teamA: "Irán", teamB: "Nueva Zelanda", group: "H" },
         { id: 17, teamA: "Francia", teamB: "Senegal", group: "I" },
         { id: 18, teamA: "Irak", teamB: "Noruega", group: "I" },
         { id: 19, teamA: "Argentina", teamB: "Argelia", group: "J" },
         { id: 20, teamA: "Austria", teamB: "Jordania", group: "J" },
         { id: 21, teamA: "Portugal", teamB: "RD Congo", group: "K" },
-        { id: 22, teamA: "Uzbekistán", teamB: "Colombia", group: "K" },
-        { id: 23, teamA: "Inglaterra", teamB: "Croacia", group: "L" },
-        { id: 24, teamA: "Ghana", teamB: "Panamá", group: "L" },
+        { id: 22, teamA: "Inglaterra", teamB: "Croacia", group: "L" },
+        { id: 23, teamA: "Ghana", teamB: "Panamá", group: "L" },
+        { id: 24, teamA: "Uzbekistán", teamB: "Colombia", group: "K" },
 
-        // ================= FECHA 2 =================
-        { id: 25, teamA: "México", teamB: "Corea del Sur", group: "A" },
-        { id: 26, teamA: "República Checa", teamB: "Sudáfrica", group: "A" },
+        // ================= FECHA 2 (Orden 100% Excel) =================
+        { id: 25, teamA: "República Checa", teamB: "Sudáfrica", group: "A" },
+        { id: 26, teamA: "Suiza", teamB: "Bosnia y Herzegovina", group: "B" },
         { id: 27, teamA: "Canadá", teamB: "Catar", group: "B" },
-        { id: 28, teamA: "Suiza", teamB: "Bosnia y Herzegovina", group: "B" },
+        { id: 28, teamA: "México", teamB: "Corea del Sur", group: "A" },
         { id: 29, teamA: "Estados Unidos", teamB: "Australia", group: "C" },
-        { id: 30, teamA: "Turquía", teamB: "Paraguay", group: "C" },
+        { id: 30, teamA: "Escocia", teamB: "Marruecos", group: "D" },
         { id: 31, teamA: "Brasil", teamB: "Haití", group: "D" },
-        { id: 32, teamA: "Escocia", teamB: "Marruecos", group: "D" },
-        { id: 33, teamA: "Alemania", teamB: "Costa de Marfil", group: "E" },
-        { id: 34, teamA: "Ecuador", teamB: "Curazao", group: "E" },
-        { id: 35, teamA: "Países Bajos", teamB: "Suecia", group: "F" },
+        { id: 32, teamA: "Turquía", teamB: "Paraguay", group: "C" },
+        { id: 33, teamA: "Países Bajos", teamB: "Suecia", group: "F" },
+        { id: 34, teamA: "Alemania", teamB: "Costa de Marfil", group: "E" },
+        { id: 35, teamA: "Ecuador", teamB: "Curazao", group: "E" },
         { id: 36, teamA: "Túnez", teamB: "Japón", group: "F" },
         { id: 37, teamA: "España", teamB: "Arabia Saudita", group: "G" },
         { id: 38, teamA: "Uruguay", teamB: "Cabo Verde", group: "G" },
@@ -266,7 +266,7 @@ app.get('/api/fix-matches', async (req, res) => {
         { id: 53, teamA: "Turquía", teamB: "Estados Unidos", group: "C" },
         { id: 54, teamA: "Paraguay", teamB: "Australia", group: "C" },
         { id: 55, teamA: "Marruecos", teamB: "Haití", group: "D" },
-        { id: 56, teamA: "Escocia", teamB: "Brasil", group: "D" }, // <- Añadido el partido 72 que faltaba
+        { id: 56, teamA: "Escocia", teamB: "Brasil", group: "D" },
         { id: 57, teamA: "Curazao", teamB: "Costa de Marfil", group: "E" },
         { id: 58, teamA: "Ecuador", teamB: "Alemania", group: "E" },
         { id: 59, teamA: "Japón", teamB: "Suecia", group: "F" },
@@ -286,18 +286,17 @@ app.get('/api/fix-matches', async (req, res) => {
     ];
 
     try {
-        // Ejecutar las actualizaciones en la base de datos de manera controlada
         for (const partido of partidosCorregidos) {
             await prisma.match.update({
                 where: { id: partido.id }, 
                 data: {
                     teamA: partido.teamA,
                     teamB: partido.teamB,
-                    group: partido.group // Inyectamos el grupo directamente en la DB
+                    group: partido.group
                 }
             });
         }
-        res.json({ message: "¡Base de datos reestructurada con éxito! 12 grupos de 4 equipos perfectos." });
+        res.json({ message: "¡Base de datos reestructurada con éxito! Las predicciones ahora cuadran con el Excel." });
     } catch(error) {
         console.error("Error al corregir partidos:", error);
         res.status(500).json({ error: "Hubo un error al actualizar los partidos." });
